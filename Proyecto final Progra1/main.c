@@ -1,38 +1,151 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define DIMTEXTO 30
-typedef struct{
-int id;
-char nombre[DIMTEXTO];
-float precio;
+typedef struct
+{
+    int id;
+    char nombre[DIMTEXTO];
+    float precio;
 
-}stProducto
+} stProducto;
 
-typedef struct{
-int id;
-char categoria[DIMTEXTO];
-}stTransporte
+typedef struct
+{
+    int id;
+    char categoria[DIMTEXTO];
+} stTransporte;
 
-typedef struct{
+typedef struct
+{
     int id;
     int dni;
     char nombre[DIMTEXTO];
     int edad;
     char puesto[DIMTEXTO];
-}stEmpleado
+    int alta;
+} stEmpleado;
 
-typedef struct{
+typedef struct
+{
     int id;
     int dni;
     char nombre[DIMTEXTO];
     stProducto carrito[DIMTEXTO];
-}stCliente
+} stCliente;
 
+void crearUnEmpleado(stEmpleado* aux, int *id);
+void altaEmpleado(char nombreArchivo[],int *id);
 int main()
 {
+    char archiEmpleado[]="empleados.bin";
+    int idEmpleado=0;
 
+    altaEmpleado(archiEmpleado,&idEmpleado);
 
     return 0;
 }
 
+void crearUnEmpleado(stEmpleado* aux, int *id)
+{
+    (*id)++;
 
+    (*aux).id=(*id);
+    (*aux).alta=1;
+    printf("ingrese dni: ");
+    scanf(" %i",&(*aux).dni);
+
+    int edadAux;
+    do
+    {
+
+        printf("ingrese edad: ");
+        scanf(" %i",&edadAux);
+    }
+    while(edadAux<18 || edadAux>60);
+
+    printf("ingrese nombre: ");
+    scanf(" %s",&(*aux).nombre);
+
+    printf("ingrese puesto: ");
+
+    scanf(" %s",&(*aux).puesto);
+}
+
+void altaEmpleado(char nombreArchivo[],int *id)
+{
+    FILE *archi=fopen(nombreArchivo,"ab");
+
+
+    if(archi!=NULL)
+    {
+        stEmpleado aux;
+        char rta='s';
+
+        while(rta=='s')
+        {
+
+
+            crearUnEmpleado(&aux,id);
+            fwrite(&aux,sizeof(stEmpleado),1,archi);
+
+            printf("ingrese(s) para seguir cargando empleados: ");
+            scanf(" %c", &rta);
+        }
+        fclose(archi);
+    }
+}
+
+void mostrarUnEmpleado(stEmpleado aux)
+{
+
+    printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+    printf("id: %i \n",aux.id);
+
+    printf("nombre: %s \n",aux.nombre);
+    printf("Dni: %i \n",aux.dni);
+    printf("puesto: %s \n",aux.puesto);
+
+    printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+}
+
+void listarEmpleadoRecursiva(FILE*archi)
+{
+    stEmpleado aux;
+
+    if(fwrite(&aux,sizeof(stEmpleado),1,archi)>0)
+    {
+        if(aux.alta==1)
+        {
+            mostrarUnEmpleado(aux);
+        }
+        listarEmpleadoRecursiva(archi);
+    }
+}
+
+int bajaEmpleado(int dniBuscado, char nombreArchivo[])
+{
+    FILE *archi=fopen(nombreArchivo,"r+b");
+    int flag=0;
+
+    if(archi!=NULL)
+    {
+        int dim=ftell(archi)/sizeof(stEmpleado);
+        stEmpleado arr[dim];
+        int i=0;
+
+        fwrite(&arr,sizeof(stEmpleado),ftell(archi)/sizeof(stEmpleado),archi);
+
+        while(i<dim && flag==0)
+        {
+            if(arr[i].dni==dniBuscado)
+            {
+                arr[i].alta--;
+                flag++;
+            }
+        }
+        fclose(archi);
+    }
+    return flag;
+}
