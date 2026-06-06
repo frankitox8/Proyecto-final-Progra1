@@ -176,32 +176,38 @@ printf("1. dni.\n"
        mostrarUnEmpleado(original);
        printf("\n");
 
-       do{
         scanf("%i", &opcion);
-       }while(opcion<1 || opcion>5);
+
 
        switch (opcion){
            case 1: printf("ingrese nuevo dni: ");
                     scanf("%i",&original.dni);
+                    printf("\n");
                     break;
+
         case 2: printf("ingrese nuevo nombre: ");
                 gets(original.nombre);
+                printf("\n");
                 break;
+
         case 3: printf("ingrese nuevo puesto: ");
                 gets(original.puesto);
+                printf("\n");
                 break;
 
         case 4: do{printf("ingrese nueva edad (recordar ser mayor de 18 y menor a 60): ");
                     scanf("%i",&original.edad);
+                    printf("\n");
                     }while(original.edad<18 || original.edad>60);
 
         case 5: if(original.alta==0){
         original.alta=1;
         }else{
-        printf("opcion invalida; usar opcion Baja de empleado para esto.");
+        printf("opcion invalida; usar opcion Baja de empleado para esto.\n");
         }
         break;
 
+        default: printf("opcion invalida, intentelo nuevamente.\n");
 
 }
 }
