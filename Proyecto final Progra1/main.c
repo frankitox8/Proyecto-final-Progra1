@@ -135,7 +135,7 @@ int bajaEmpleado(int dniBuscado, char nombreArchivo[])
         stEmpleado arr[dim];
         int i=0;
 
-        fwrite(&arr,sizeof(stEmpleado),ftell(archi)/sizeof(stEmpleado),archi);
+        fread(&arr,sizeof(stEmpleado),dim,archi);
 
         while(i<dim && flag==0)
         {
@@ -145,7 +145,19 @@ int bajaEmpleado(int dniBuscado, char nombreArchivo[])
                 flag++;
             }
         }
+        i=0;
+
+        if(flag==1){
+            fseek(archi,0,SEEK_SET);
+
+            while(i<dim){
+                fwrite(&arr[i],sizeof(stEmpleado),1,archi);
+            }
+        }
+
         fclose(archi);
     }
     return flag;
 }
+
+
