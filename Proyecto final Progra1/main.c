@@ -147,10 +147,12 @@ int bajaEmpleado(int dniBuscado, char nombreArchivo[])
         }
         i=0;
 
-        if(flag==1){
+        if(flag==1)
+        {
             fseek(archi,0,SEEK_SET);
 
-            while(i<dim){
+            while(i<dim)
+            {
                 fwrite(&arr[i],sizeof(stEmpleado),1,archi);
             }
         }
@@ -159,5 +161,48 @@ int bajaEmpleado(int dniBuscado, char nombreArchivo[])
     }
     return flag;
 }
+stEmpleado modificarUnEmpleado(stEmpleado original, char nombreArchivo[]){
+int opcion;
+stEmpleado moddeado;
 
+printf("ingrese una opcion: ");
+printf("1. dni.\n"
+       "2. nombre.\n"
+       "3.Puesto.\n"
+       "4. edad.\n"
+       "5. alta.\n\n");
+
+       printf("estado actual: ");
+       mostrarUnEmpleado(original);
+       printf("\n");
+
+       do{
+        scanf("%i", &opcion);
+       }while(opcion<1 || opcion>5);
+
+       switch (opcion){
+           case 1: printf("ingrese nuevo dni: ");
+                    scanf("%i",&original.dni);
+                    break;
+        case 2: printf("ingrese nuevo nombre: ");
+                gets(original.nombre);
+                break;
+        case 3: printf("ingrese nuevo puesto: ");
+                gets(original.puesto);
+                break;
+
+        case 4: do{printf("ingrese nueva edad (recordar ser mayor de 18 y menor a 60): ");
+                    scanf("%i",&original.edad);
+                    }while(original.edad<18 || original.edad>60);
+
+        case 5: if(original.alta==0){
+        original.alta=1;
+        }else{
+        printf("opcion invalida; usar opcion Baja de empleado para esto.");
+        }
+        break;
+
+
+}
+}
 
