@@ -35,6 +35,7 @@ typedef struct
 
 void crearUnEmpleado(stEmpleado* aux, int *id);
 void altaEmpleado(char nombreArchivo[],int *id);
+
 int main()
 {
     char archiEmpleado[]="empleados.bin";
