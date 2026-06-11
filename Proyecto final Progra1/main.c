@@ -23,6 +23,7 @@ typedef struct
     int edad;
     char puesto[DIMTEXTO];
     int alta;
+    * laburo;
 } stEmpleado;
 
 typedef struct
@@ -33,8 +34,8 @@ typedef struct
     stProducto carrito[DIMTEXTO];
 } stCliente;
 
-void crearUnEmpleado(stEmpleado* aux, int *id);
-void altaEmpleado(char nombreArchivo[],int *id);
+void crearUnEmpleado(stEmpleado* aux);
+void altaEmpleado(char nombreArchivo[]);
 
 void mostrarUnEmpleado(stEmpleado aux);
 void listarEmpleadoRecursiva(FILE*archi);
@@ -46,11 +47,12 @@ stEmpleado consultaEmpleado(char nombreArchivo[], int dniEmpleado, int *pos);
 int main()
 {
     char archiEmpleado[]="empleados.bin";
-    int rta;
+    int rta,opcionE, dniEmpleado, posEmpleado=0;
     char seguir='s';
 
     while(seguir =='s')
     {
+
         printf("ingrese una opcion: "
                "1. Sistema Empleados.\n"
                "2. Sistema Cliente.\n"
@@ -61,26 +63,26 @@ int main()
         {
 
         case 1:
-            int opcionE, dniEmpleado, posEmpleado=0;
+
 
             printf("ingrese su dni: ");
             scanf(" %i", &dniEmpleado);
 
-            stEmpleado empleadoActual=consultaEmpleado(archiEmpleado,dniEmpleado ,&posEmpleado);
+            stEmpleado empleadoActual=consultaEmpleado(archiEmpleado,dniEmpleado,&posEmpleado);
 
-                                       if(empleadoActual.dni!=NULL)
-        {
-            char rtaEmpleado='s';
-            do
+            if(empleadoActual.dni!=NULL)
             {
-                printf("\n----- Menu Empleados -----\n\n");
+                char rtaEmpleado='s';
+                do
+                {
+                    printf("\n----- Menu Encargado -----\n\n");
 
                     printf("Ingrese una opcion: "
                            "1. Alta empleado."
                            "2. Baja empleado."
                            "3. Modificar Empleado."
                            "4. Buscar Empleado."
-                           "5. Listar Empleado Actual.");
+                           "5. Listar Empleados.");
                     scanf(" %i",&opcionE);
 
                     switch(opcionE)
@@ -94,7 +96,7 @@ int main()
                         break;
 
                     case 3:
-                        modificarUnEmpleado(empleadoActual,archiEmpleado)
+                        modificarUnEmpleado(empleadoActual,archiEmpleado);
                         break;
                     }
 
@@ -115,242 +117,245 @@ int main()
                 printf("ingrese (s) para volver a intentarlo: ");
                 scanf(" %c",&seguir);
             }
-
-
-            return 0;
         }
 
-        void crearUnEmpleado(stEmpleado* aux, int *id)
+    }
+    return 0;
+
+}
+
+void crearUnEmpleado(stEmpleado* aux)
+{
+
+    printf(" ");
+    ((*aux).id);
+
+    (*aux).alta=1;
+    printf("ingrese dni: ");
+    scanf("%i",&(*aux).dni);
+
+    int edadAux;
+    do
+    {
+
+        printf("ingrese edad: ");
+        scanf(" %i",&edadAux);
+    }
+    while(edadAux<18 || edadAux>60);
+
+    printf("ingrese nombre: ");
+    scanf(" %s",&(*aux).nombre);
+
+    printf("ingrese puesto: ");
+
+    scanf(" %s",&(*aux).puesto);
+
+}
+
+void altaEmpleado(char nombreArchivo[])
+{
+    FILE *archi=fopen(nombreArchivo,"ab");
+
+
+    if(archi!=NULL)
+    {
+        stEmpleado aux;
+        char rta='s';
+
+        while(rta=='s')
         {
-            (*id)++;
 
-            (*aux).id=(*id);
-            (*aux).alta=1;
-            printf("ingrese dni: ");
-            scanf(" %i",&(*aux).dni);
 
-            int edadAux;
+            crearUnEmpleado(&aux);
+
+            fwrite(&aux,sizeof(stEmpleado),1,archi);
+
+            printf("ingrese(s) para seguir cargando empleados: ");
+            scanf(" %c", &rta);
+        }
+        fclose(archi);
+    }
+}
+
+void mostrarUnEmpleado(stEmpleado aux)
+{
+
+    printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+    printf("id: %i \n",aux.id);
+
+    printf("nombre: %s \n",aux.nombre);
+    printf("Dni: %i \n",aux.dni);
+    printf("puesto: %s \n",aux.puesto);
+
+    printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+}
+
+void listarEmpleadoRecursiva(FILE*archi)
+{
+    stEmpleado aux;
+
+    if(fwrite(&aux,sizeof(stEmpleado),1,archi)>0)
+    {
+        if(aux.alta==1)
+        {
+            mostrarUnEmpleado(aux);
+        }
+        listarEmpleadoRecursiva(archi);
+    }
+}
+
+int bajaEmpleado(int dniBuscado, char nombreArchivo[])
+{
+    FILE *archi=fopen(nombreArchivo,"r+b");
+    int flag=0;
+
+    if(archi!=NULL)
+    {
+        int dim=ftell(archi)/sizeof(stEmpleado);
+        stEmpleado arr[dim];
+        int i=0;
+
+        fread(&arr,sizeof(stEmpleado),dim,archi);
+
+        while(i<dim && flag==0)
+        {
+            if(arr[i].dni==dniBuscado)
+            {
+                arr[i].alta--;
+                flag++;
+            }
+        }
+        i=0;
+
+        if(flag==1)
+        {
+            fseek(archi,0,SEEK_SET);
+
+            while(i<dim)
+            {
+                fwrite(&arr[i],sizeof(stEmpleado),1,archi);
+            }
+        }
+
+        fclose(archi);
+    }
+    return flag;
+}
+void modificarUnEmpleado(stEmpleado *original)
+{
+    int opcion;
+    stEmpleado moddeado;
+    char rta='s';
+
+    while(rta=='s')
+    {
+        printf("ingrese una opcion: ");
+        printf("1. dni.\n"
+               "2. nombre.\n"
+               "3.Puesto.\n"
+               "4. edad.\n"
+               "5. alta.\n\n");
+
+        printf("estado actual: ");
+        mostrarUnEmpleado(*original);
+        printf("\n");
+
+        scanf("%i", &opcion);
+
+
+        switch (opcion)
+        {
+        case 1:
+            printf("ingrese nuevo dni: ");
+            scanf("%i",&original.dni);
+            printf("\n");
+            break;
+
+        case 2:
+            printf("ingrese nuevo nombre: ");
+            gets(original.nombre);
+            printf("\n");
+            break;
+
+        case 3:
+            printf("ingrese nuevo puesto: ");
+            gets(original.puesto);
+            printf("\n");
+            break;
+
+        case 4:
             do
             {
-
-                printf("ingrese edad: ");
-                scanf(" %i",&edadAux);
-            }
-            while(edadAux<18 || edadAux>60);
-
-            printf("ingrese nombre: ");
-            scanf(" %s",&(*aux).nombre);
-
-            printf("ingrese puesto: ");
-
-            scanf(" %s",&(*aux).puesto);
-        }
-
-        void altaEmpleado(char nombreArchivo[],int *id)
-        {
-            FILE *archi=fopen(nombreArchivo,"ab");
-
-
-            if(archi!=NULL)
-            {
-                stEmpleado aux;
-                char rta='s';
-
-                while(rta=='s')
-                {
-
-
-                    crearUnEmpleado(&aux,id);
-
-                    fwrite(&aux,sizeof(stEmpleado),1,archi);
-
-                    printf("ingrese(s) para seguir cargando empleados: ");
-                    scanf(" %c", &rta);
-                }
-                fclose(archi);
-            }
-        }
-
-        void mostrarUnEmpleado(stEmpleado aux)
-        {
-
-            printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-            printf("id: %i \n",aux.id);
-
-            printf("nombre: %s \n",aux.nombre);
-            printf("Dni: %i \n",aux.dni);
-            printf("puesto: %s \n",aux.puesto);
-
-            printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-        }
-
-        void listarEmpleadoRecursiva(FILE*archi)
-        {
-            stEmpleado aux;
-
-            if(fwrite(&aux,sizeof(stEmpleado),1,archi)>0)
-            {
-                if(aux.alta==1)
-                {
-                    mostrarUnEmpleado(aux);
-                }
-                listarEmpleadoRecursiva(archi);
-            }
-        }
-
-        int bajaEmpleado(int dniBuscado, char nombreArchivo[])
-        {
-            FILE *archi=fopen(nombreArchivo,"r+b");
-            int flag=0;
-
-            if(archi!=NULL)
-            {
-                int dim=ftell(archi)/sizeof(stEmpleado);
-                stEmpleado arr[dim];
-                int i=0;
-
-                fread(&arr,sizeof(stEmpleado),dim,archi);
-
-                while(i<dim && flag==0)
-                {
-                    if(arr[i].dni==dniBuscado)
-                    {
-                        arr[i].alta--;
-                        flag++;
-                    }
-                }
-                i=0;
-
-                if(flag==1)
-                {
-                    fseek(archi,0,SEEK_SET);
-
-                    while(i<dim)
-                    {
-                        fwrite(&arr[i],sizeof(stEmpleado),1,archi);
-                    }
-                }
-
-                fclose(archi);
-            }
-            return flag;
-        }
-        stEmpleado modificarUnEmpleado(stEmpleado original)
-        {
-            int opcion;
-            stEmpleado moddeado;
-            char rta='s';
-
-            while(rta=='s')
-            {
-                printf("ingrese una opcion: ");
-                printf("1. dni.\n"
-                       "2. nombre.\n"
-                       "3.Puesto.\n"
-                       "4. edad.\n"
-                       "5. alta.\n\n");
-
-                printf("estado actual: ");
-                mostrarUnEmpleado(original);
+                printf("ingrese nueva edad (recordar ser mayor de 18 y menor a 60): ");
+                scanf("%i",&original.edad);
                 printf("\n");
-
-                scanf("%i", &opcion);
-
-
-                switch (opcion)
-                {
-                case 1:
-                    printf("ingrese nuevo dni: ");
-                    scanf("%i",&original.dni);
-                    printf("\n");
-                    break;
-
-                case 2:
-                    printf("ingrese nuevo nombre: ");
-                    gets(original.nombre);
-                    printf("\n");
-                    break;
-
-                case 3:
-                    printf("ingrese nuevo puesto: ");
-                    gets(original.puesto);
-                    printf("\n");
-                    break;
-
-                case 4:
-                    do
-                    {
-                        printf("ingrese nueva edad (recordar ser mayor de 18 y menor a 60): ");
-                        scanf("%i",&original.edad);
-                        printf("\n");
-                    }
-                    while(original.edad<18 || original.edad>60);
-
-                case 5:
-                    if(original.alta==0)
-                    {
-                        original.alta=1;
-                    }
-                    else
-                    {
-                        printf("opcion invalida; usar opcion Baja de empleado para esto.\n");
-                    }
-                    break;
-
-                default:
-                    printf("opcion invalida, intentelo nuevamente.\n");
-
-                }
-                printf("ingrese (s) para seguir modificando: ");
-                scanf(" %c", &rta);
             }
-            return original;
-        }
+            while(original.edad<18 || original.edad>60);
 
-        void modificarEmpleados(char nombreArchivo[],int dniEmpleado)
-        {
-            FILE *archi=fopen(nombreArchivo,"r+b");
-
-
-            if(archi!=NULL)
+        case 5:
+            if(original.alta==0)
             {
-                int pos=0;
-                stEmpleado aux=consultaEmpleado(nombreArchivo,dniEmpleado, &pos);
-
-                if(aux!=NULL)
-                {
-                    aux=modificarUnEmpleado(aux)
-
-                        fseek(archi,sizeof(stEmpleado)*pos,SEEK_SET);
-                    fwrite(&aux,sizeof(stEmpleado),1,archi);
-                }
-                fclose(archi);
+                original.alta=1;
             }
-        }
-
-        stEmpleado consultaEmpleado(char nombreArchivo[], int dniEmpleado, int *pos)
-        {
-            FILE *archi= fopen(nombreArchivo,"rb");
-            int flag=0;
-            stEmpleado aux= NULL;
-
-            if(archi!=NULL)
+            else
             {
-
-                while(fread(&aux,sizeof(stEmpleado),1,archi)>0 && flag ==0)
-                {
-                    if(aux.dni==dniEmpleado)
-                    {
-                        flag++;
-
-                    }
-                    (*pos)++;
-                }
-
-
-                fclose(archi);
+                printf("opcion invalida; usar opcion Baja de empleado para esto.\n");
             }
-            return aux;
+            break;
+
+        default:
+            printf("opcion invalida, intentelo nuevamente.\n");
+
         }
+        printf("ingrese (s) para seguir modificando: ");
+        scanf(" %c", &rta);
+    }
+    return original;
+}
+
+void modificarEmpleados(char nombreArchivo[],int dniEmpleado)
+{
+    FILE *archi=fopen(nombreArchivo,"r+b");
+
+
+    if(archi!=NULL)
+    {
+        int pos=0;
+        stEmpleado aux=consultaEmpleado(nombreArchivo,dniEmpleado, &pos);
+
+        if(aux!=NULL)
+        {
+
+                fseek(archi,sizeof(stEmpleado)*pos,SEEK_SET);
+            fwrite(&aux,sizeof(stEmpleado),1,archi);
+        }
+        fclose(archi);
+    }
+}
+
+stEmpleado consultaEmpleado(char nombreArchivo[], int dniEmpleado, int *pos)
+{
+    FILE *archi= fopen(nombreArchivo,"rb");
+    int flag=0;
+    stEmpleado aux;
+
+    if(archi!=NULL)
+    {
+
+        while(fread(&aux,sizeof(stEmpleado),1,archi)>0 && flag ==0)
+        {
+            if(aux.dni==dniEmpleado)
+            {
+                flag++;
+
+            }
+            (*pos)++;
+        }
+
+
+        fclose(archi);
+    }
+    return aux;
+}
