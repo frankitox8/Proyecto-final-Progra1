@@ -35,10 +35,56 @@ typedef struct
 
 void crearUnEmpleado(stEmpleado* aux, int *id);
 void altaEmpleado(char nombreArchivo[],int *id);
+
 int main()
 {
     char archiEmpleado[]="empleados.bin";
-    int idEmpleado=0;
+    int rta;
+
+    printf("ingrese una opcion: "
+           "1. Sistema Empleados.\n"
+           "2. Sistema Cliente.\n"
+           "3. salir.\n\n");
+           scanf(" %i", &rta);
+
+           switch(rta){
+
+       case 1: int opcionE, int dniEmpleado;
+
+       printf("ingrese su dni: ");
+       scanf(" %i", &dniEmpleado);
+
+       if(consultaEmpleado(dniEmpleado, archiEmpleado)==1){
+           do{
+           printf("\n----- Menu Empleados -----\n\n");
+
+           printf("Ingrese una opcion: "
+                  "1. Alta empleado."
+                  "2. Baja empleado."
+                  "3. Modificar Empleado."
+                  "4. Buscar Empleado."
+                  "5. Listar Empleado Actual.");
+                  scanf(" %i",&opcionE);
+
+                  switch(opcionE){
+                  case 1: altaEmpleado(archiEmpleado,&idEmpleado);
+                  break;
+
+                  case 2: bajaEmpleado(dniEmpleado,archiEmpleado);
+                  }
+
+           }
+       }
+
+        break;
+
+       case 2:
+        break;
+        printf("Gracias. ");
+        case 3: return 0;
+
+        default: printf("ingrese una opcion valida.\n");
+           }
 
     altaEmpleado(archiEmpleado,&idEmpleado);
 
@@ -164,7 +210,9 @@ int bajaEmpleado(int dniBuscado, char nombreArchivo[])
 stEmpleado modificarUnEmpleado(stEmpleado original, char nombreArchivo[]){
 int opcion;
 stEmpleado moddeado;
+char rta='s';
 
+while(rta=='s'){
 printf("ingrese una opcion: ");
 printf("1. dni.\n"
        "2. nombre.\n"
@@ -202,13 +250,17 @@ printf("1. dni.\n"
 
         case 5: if(original.alta==0){
         original.alta=1;
-        }else{
+        }
+        else{
         printf("opcion invalida; usar opcion Baja de empleado para esto.\n");
         }
         break;
 
         default: printf("opcion invalida, intentelo nuevamente.\n");
 
+}
+printf("ingrese (s) para continuar: ");
+scanf(" %c", &rta);
 }
 }
 
