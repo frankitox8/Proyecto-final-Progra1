@@ -212,3 +212,21 @@ printf("1. dni.\n"
 }
 }
 
+int consultaEmpleado(char nombreArchivo[], int dniEmpleado){
+FILE *archi= fopen(nombreArchivo,"rb");
+ int flag=0;
+
+if(archi!=NULL){
+    stEmpleado aux;
+
+    while(fread(&aux,sizeof(stEmpleado),1,archi)>0 && flag ==0){
+        if(aux.dni==dniEmpleado){
+            flag++;
+        }
+    }
+
+
+fclose(archi);
+}
+return flag;
+}
