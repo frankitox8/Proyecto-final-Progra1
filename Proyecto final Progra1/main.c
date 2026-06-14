@@ -1,32 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define DIMTEXTO 30
-typedef struct{
-int id;
-char nombre[DIMTEXTO];
-float precio;
+typedef struct
+{
+    int id;
+    char nombre[DIMTEXTO];
+    float precio;
+}stProducto;
 
-}stProducto
+typedef struct
+{
+    int id;
+    char categoria[DIMTEXTO];
+}stTransporte;
 
-typedef struct{
-int id;
-char categoria[DIMTEXTO];
-}stTransporte
-
-typedef struct{
+typedef struct
+{
     int id;
     int dni;
     char nombre[DIMTEXTO];
     int edad;
     char puesto[DIMTEXTO];
-}stEmpleado
+}stEmpleado;
 
-typedef struct{
+typedef struct
+{
     int id;
     int dni;
     char nombre[DIMTEXTO];
     stProducto carrito[DIMTEXTO];
-}stCliente
+}stCliente;
 
 void menu();
 
@@ -43,14 +46,35 @@ void menu()
     {
         printf("\nIngrese la opcion: \n");
         printf("_________________________________\n");
-        printf("| [1] |\n")
-        printf("| [2] |\n")
-        printf("| [3] |\n")
-        printf("| [4] |\n")
-        printf("| [5] |\n")
-        printf("| [6] |\n")
-        printf("| [7] |\n")
+        printf("| [1] |\n");
+        printf("| [2] |\n");
+        printf("| [3] |\n");
+        printf("| [4] |\n");
+        printf("| [5] |\n");
+        printf("| [6] |\n");
+        printf("| [7] |\n");
         printf("| [0] FINALIZAR EL PROGRAMA     |\n");
-        printf("---------------------------------");
+        printf("---------------------------------\n");
+        scanf("%i", &op);
+        system("cls");
+        switch(op)
+        {
+            default:
+                {
+                    printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~");
+                }break;
+            case 1:
+                {
+
+                }break;
+            case 2:
+                {
+
+                }break;
+            case 0:
+                {
+                    printf("- - - FINALIZANDO EL PROGRAMA - - -");
+                }
+        }
     }while(op != 0);
 }
