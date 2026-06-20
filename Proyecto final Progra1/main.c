@@ -77,10 +77,8 @@ void menu()
             printf("-----------------\n");
             if (scanf("%i", &op) != 1)
             {
-                printf("Error:~ ~ ~ DEBE INGRESAR UNA OPCION VALIDA ~ ~ ~\n");
                 while (getchar() != '\n');
                 op = -1;
-                system("pause");
             }
             system("cls");
         switch(op)
@@ -149,10 +147,8 @@ void menuClientes()
         printf("-------------------------\n");
         if (scanf("%i", &op) != 1)
         {
-            printf("Error:~ ~ ~ DEBE INGRESAR UNA OPCION VALIDA ~ ~ ~\n");
             while (getchar() != '\n');
             op = -1;
-            system("pause");
         }
         system("cls");
         switch(op)
