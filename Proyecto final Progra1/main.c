@@ -41,10 +41,11 @@ void menuEmpleado();
 ////CLIENTE
 stCliente crearCliente();
 void altaClientesArchivo(char nombre[]);
-int verificacionDeElementos(FILE *archi, stCliente clienteNuevo);
+int verificacionCliente(FILE *archi, stCliente clienteNuevo);
 ////EMPLEADO
 stEmpleado crearUnEmpleado(int id);
-
+void altaEmpleado(char nombreArchivo[]);
+int verificacionEmpleado(FILE *archi, stEmpleado empleado);
 //BAJA
 void bajaDeClienteDeArchivo(char nombre[], int id);
 //MODIFICACION
@@ -52,7 +53,7 @@ void modificarClienteDeArchivo(char nombre[], int id);
 stCliente modificarCliente(FILE *archi, int id);
 //CONSULTA
 void mostrarCliente(stCliente cliente);
-void mostrarClienteEnArchivo(char nombre[], int id);
+void mostrarClientesArchivo(char nombre[], int id);
 //LISTADOS
 
 
@@ -219,7 +220,7 @@ void altaClientesArchivo(char nombre[])
             i++;
         }
         aux = crearCliente(i+1);
-        existe = verificacionDeElementos(archi, aux);
+        existe = verificacionCliente(archi, aux);
         if(existe == 1)
         {
             printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
@@ -232,14 +233,14 @@ void altaClientesArchivo(char nombre[])
     }
 }
 
-int verificacionDeElementos(FILE *archi, stCliente clienteNuevo)
+int verificacionCliente(FILE *archi, stCliente clienteNuevo)
 {
     stCliente aux;
     int existe = 0;
     fseek(archi, 0, SEEK_SET);
     while(fread(&aux, sizeof(stCliente), 1, archi) > 0)
     {
-        if(aux.id == clienteNuevo.id && aux.dni == clienteNuevo.dni)
+        if(aux.id == clienteNuevo.id || aux.dni == clienteNuevo.dni)
         {
             existe = 1;
         }
@@ -319,7 +320,7 @@ void mostrarCliente(stCliente cliente)
     printf("-----------------------------\n");
 }
 
-void mostrarClienteEnArchivo(char nombre[], int id)
+void mostrarClientesArchivo(char nombre[], int id)
 {
     stCliente aux;
     FILE *archi = fopen(nombre, "rb");
@@ -371,7 +372,7 @@ stEmpleado crearUnEmpleado(int id)
 
 void altaEmpleado(char nombreArchivo[])
 {
-    int i = 0;
+    int i = 0, existe = 0;
     stEmpleado aux;
     FILE *archi = fopen(nombreArchivo, "r+b");
     if(archi != NULL)
@@ -381,7 +382,30 @@ void altaEmpleado(char nombreArchivo[])
             i++;
         }
         aux = crearUnEmpleado(i+1);
-        fwrite(&aux, sizeof(stEmpleado), 1, archi);
+        existe = verificacionEmpleado(archi, aux);
+        if(existe == 1)
+        {
+            printf("\n- - - ESTE EMPLEADO YA EXISTE - - -\n");
+        }
+        else
+        {
+         fwrite(&aux, sizeof(stEmpleado), 1, archi);
+        }
         fclose(archi);
     }
+}
+
+int verificacionEmpleado(FILE *archi, stEmpleado empleado)
+{
+    stEmpleado aux;
+    int existe = 0;
+    fseek(archi, 0, SEEK_SET);
+    if(fread(&aux, sizeof(stEmpleado), 1, archi) > 0)
+    {
+        if(aux.id == empleado.id || aux.dni == empleado.dni)
+        {
+            existe = 1;
+        }
+    }
+    return existe;
 }
