@@ -13,12 +13,6 @@ typedef struct
 typedef struct
 {
     int id;
-    char categoria[DIMTEXTO];
-}stTransporte;
-
-typedef struct
-{
-    int id;
     int dni;
     char nombre[DIMTEXTO];
     int edad;
@@ -31,11 +25,92 @@ typedef struct
     int dni;
     char nombre[DIMTEXTO];
     stProducto carrito[DIMTEXTO];
+    int activo;
 }stCliente;
+
+void menu();
+void menuClientes();
+void menuProducto();
+void menuEmpleado();
+//ALTA
+stCliente crearCliente();
+void altaClientesArchivo(char nombre[]);
+int verificacionDeElementos(FILE *archi, stCliente clienteNuevo);
+//BAJA
+void bajaDeClienteDeArchivo(char nombre[], int id);
+//MODIFICACION
+void modificarClienteDeArchivo(char nombre[], int id);
+stCliente modificarCliente(FILE *archi, int id);
+//CONSULTA
+
 
 int main()
 {
+    menu();
     return 0;
+}
+
+void menu()
+{
+    int op;
+    do
+    {
+            printf("Ingrese una opcion:\n");
+            printf("_________________\n");
+            printf("|[1] CLIENTE    |\n");
+            printf("|[2] EMPLEADO   |\n");
+            printf("|[3] PRODUCTO   |\n");
+            printf("|[0] SALIR      |\n");
+            printf("-----------------\n");
+            if (scanf("%i", &op) != 1)
+            {
+                printf("Error: ¡Debe ingresar un numero entero!\n");
+                while (getchar() != '\n');
+                op = -1;
+                system("pause");
+            }
+            system("cls");
+        switch(op)
+        {
+        default:
+            {
+                printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~\n");
+                system("pause");
+                system("cls");
+            }break;
+        case 1:
+            {
+                menuClientes();
+            }break;
+        case 2:
+            {
+                menuEmpleado();
+            }break;
+        case 3:
+            {
+                menuProducto();
+            }break;
+        case 0:
+            {
+                printf("- - - FINALIZANDO EL PROGRAMA - - -\n");
+            }break;
+        }
+    }while(op != 0);
+}
+
+void menuClientes()
+{
+
+}
+
+void menuEmpleado()
+{
+
+}
+
+void menuProducto()
+{
+
 }
 
 //ABMCL DE CLIENTE
@@ -50,20 +125,27 @@ stCliente crearCliente()
     scanf("%i", &aux.dni);
     printf("Ingrese el nombre del cliente: \n");
     scanf(" %s", &aux.nombre);
+    aux.activo = 1;
     printf("-------------------------------\n");
     return aux;
 }
 
-void altaArchivoDeClientes(char nombre[])
+void altaClientesArchivo(char nombre[])
 {
+    int existe;
     stCliente aux;
-    FILE *archi = fopen(nombre, "ab");
+    FILE *archi = fopen(nombre, "a+b");
     if(archi != NULL)
     {
         aux = crearCliente();
-        if()
+        verificacionDeElementos(archi, aux);
+        if(existe == 1)
         {
-
+            printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
+        }
+        else
+        {
+            fwrite(&aux, sizeof(stCliente), 1, archi);
         }
         fclose(archi);
     }
@@ -71,10 +153,81 @@ void altaArchivoDeClientes(char nombre[])
 
 int verificacionDeElementos(FILE *archi, stCliente clienteNuevo)
 {
+    stCliente aux;
     int existe = 0;
-    if()
+    fseek(archi, 0, SEEK_SET);
+    while(fread(&aux, sizeof(stCliente), 1, archi) > 0)
     {
-
+        if(aux.id == clienteNuevo.id && aux.dni == clienteNuevo.dni)
+        {
+            existe = 1;
+        }
     }
     return existe;
+}
+
+//BAJA DE CLIENTE
+void bajaDeClienteDeArchivo(char nombre[], int id)
+{
+    stCliente aux;
+    FILE *archi = fopen(nombre, "r+b");
+    if(archi != NULL)
+    {
+        if(fread(&aux, sizeof(stCliente), 1, archi) > 0)
+        {
+            if(aux.id == id)
+            {
+                aux.activo = 0;
+            }
+        }
+        fclose(archi);
+    }
+}
+
+//MODIFICACION DE CLIENTE
+void modificarClienteDeArchivo(char nombre[], int id)
+{
+    FILE *archi = fopen(nombre, "r+b");
+    if(archi != NULL)
+    {
+        modificarCliente(archi, id);
+        fclose(archi);
+    }
+}
+
+stCliente modificarCliente(FILE *archi, int id)
+{
+    char op = 'n';
+    stCliente aux;
+    if(fread(&aux, sizeof(stCliente), 1, archi) > 0)
+        {
+            if(aux.id == id)
+            {
+                printf("Quiere modificar el DNI? (s/n): ");
+                if(op == 's')
+                {
+                    printf("\nIngrese el nuevo DNI: ");
+                    scanf("%i", &aux.dni);
+                }
+                printf("Quiere modificar el nombre? (s/n): ");
+                if(op == 's')
+                {
+                    printf("\nIngrese el nuevo nombre: ");
+                    scanf(" %s", &aux.nombre);
+                }
+                printf("Quiere modificar el carrito? (s/n): ");
+                if(op == 's')
+                {
+                    printf("\nIngrese el nuevo carrito: ");
+                    //LLAMAR FUNCION DE CREAR CARRITO !!!!
+                }
+            }
+        }
+    return aux;
+}
+
+//CONSULTA DE CLIENTE
+void mostrarClienteEnArchivo()
+{
+
 }
