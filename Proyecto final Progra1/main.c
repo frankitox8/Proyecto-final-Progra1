@@ -405,3 +405,4 @@ int verificacionEmpleado(FILE *archi, stEmpleado empleado)
     }
     return existe;
 }
+
