@@ -57,14 +57,14 @@ void menu()
     {
             printf("Ingrese una opcion:\n");
             printf("_________________\n");
-            printf("|[1] CLIENTE    |\n");
-            printf("|[2] EMPLEADO   |\n");
-            printf("|[3] PRODUCTO   |\n");
-            printf("|[0] SALIR      |\n");
+            printf("|\x1b[34m[1] CLIENTE\x1b[0m    |\n");
+            printf("|\x1b[33m[2] EMPLEADO\x1b[0m   |\n");
+            printf("|\x1b[32m[3] PRODUCTO\x1b[0m   |\n");
+            printf("|\x1b[31m[0] SALIR\x1b[0m      |\n");
             printf("-----------------\n");
             if (scanf("%i", &op) != 1)
             {
-                printf("Error: ¡Debe ingresar un numero entero!\n");
+                printf("Error:~ ~ ~ DEBE INGRESAR UNA OPCION VALIDA ~ ~ ~\n");
                 while (getchar() != '\n');
                 op = -1;
                 system("pause");
