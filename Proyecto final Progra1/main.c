@@ -19,13 +19,14 @@ typedef struct
     char nombreYApellido[DIMTEXTO];
     int edad;
     char puesto[DIMTEXTO];
+    int activo;
 }stEmpleado;
 
 typedef struct
 {
     int id;
     int dni;
-    char nombreYApellido[DIMTEXTO];
+    char nombre[DIMTEXTO];
     stProducto carrito[DIMTEXTO];
     int activo;
 }stCliente;
@@ -37,9 +38,13 @@ void menuClientes();
 void menuProducto();
 void menuEmpleado();
 //ALTA
+////CLIENTE
 stCliente crearCliente();
 void altaClientesArchivo(char nombre[]);
 int verificacionDeElementos(FILE *archi, stCliente clienteNuevo);
+////EMPLEADO
+stEmpleado crearUnEmpleado(int id);
+
 //BAJA
 void bajaDeClienteDeArchivo(char nombre[], int id);
 //MODIFICACION
@@ -188,23 +193,15 @@ void menuProducto()
 
 //ABMCL DE CLIENTE
 //ALTA CLIENTE
-stCliente crearCliente()
+stCliente crearCliente(int id)
 {
-    char nombre[DIMTEXTO];
-    char apellido[DIMTEXTO];
     stCliente aux;
     printf("_______________________________\n");
-    printf("Ingrese el ID del cliente: \n");
-    scanf("%i", &aux.id);
+    aux.id = id;
     printf("Ingrese el DNI del cliente: \n");
     scanf("%i", &aux.dni);
     printf("Ingrese el nombre del cliente: \n");
-    scanf(" %s", &nombre);
-    printf("Ingrese el apellido del cliente: \n");
-    scanf(" %s", &apellido);
-    strcat(nombre, " ");
-    strcat(nombre, apellido);
-    strcpy(aux.nombreYApellido, nombre);
+    scanf(" %s", &aux.nombre);
     aux.activo = 1;
     printf("-------------------------------\n");
     return aux;
@@ -212,22 +209,26 @@ stCliente crearCliente()
 
 void altaClientesArchivo(char nombre[])
 {
-    int existe;
+    int existe = 0, i = 0;
     stCliente aux;
-    FILE *archi = fopen(nombre, "a+b");
+    FILE *archi = fopen(nombre, "r+b");
     if(archi != NULL)
     {
-            aux = crearCliente();
-            verificacionDeElementos(archi, aux);
-            if(existe == 1)
-            {
-                printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
-            }
-            else
-            {
-                fwrite(&aux, sizeof(stCliente), 1, archi);
-            }
-            fclose(archi);
+        if(fread(&aux, sizeof(stCliente), 1, archi) > 0)
+        {
+            i++;
+        }
+        aux = crearCliente(i+1);
+        existe = verificacionDeElementos(archi, aux);
+        if(existe == 1)
+        {
+            printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
+        }
+        else
+        {
+            fwrite(&aux, sizeof(stCliente), 1, archi);
+        }
+        fclose(archi);
     }
 }
 
@@ -293,7 +294,7 @@ stCliente modificarCliente(FILE *archi, int id)
                 if(op == 's')
                 {
                     printf("\nIngrese el nuevo nombre: ");
-                    scanf(" %s", &aux.nombreYApellido);
+                    scanf(" %s", &aux.nombre);
                 }
                 printf("Quiere modificar el carrito? (s/n): ");
                 if(op == 's')
@@ -313,7 +314,7 @@ void mostrarCliente(stCliente cliente)
     printf("____________________________\n");
     printf("| ID: %i |\n", cliente.id);
     printf("| DNI %i |\n", cliente.dni);
-    printf("| NOMBRE: %s\n", cliente.nombreYApellido);
+    printf("| NOMBRE: %s\n", cliente.nombre);
     //LLAMAR A FUNCION DE MOSTRAR PRODUCTO
     printf("-----------------------------\n");
 }
@@ -336,3 +337,51 @@ void mostrarClienteEnArchivo(char nombre[], int id)
 }
 
 //LISTADOS DE CLIENTE
+
+
+//ALTA EMPLEADO
+stEmpleado crearUnEmpleado(int id)
+{
+    char nombre[DIMTEXTO];
+    char apellido[DIMTEXTO];
+    stEmpleado aux;
+    id++;
+    aux.id = id;
+    aux.activo = 1;
+    printf("________________\n ");
+    printf("Ingrese el dni del empleado: ");
+    scanf(" %i", &aux.dni);
+    int edad;
+    do
+    {
+        printf("ingrese edad del empleado: ");
+        scanf(" %i", &edad);
+    }
+    while(edad < 18 || edad > 60);
+    printf("Ingrese el nombre del empleado: \n");
+    scanf(" %s", &nombre);
+    printf("Ingrese el apellido del empleado: \n");
+    scanf(" %s", &apellido);
+    strcat(nombre, " ");
+    strcat(nombre, apellido);
+    strcpy(aux.nombreYApellido, nombre);
+    printf("ingrese puesto: ");
+    scanf(" %s", &aux.puesto);
+}
+
+void altaEmpleado(char nombreArchivo[])
+{
+    int i = 0;
+    stEmpleado aux;
+    FILE *archi = fopen(nombreArchivo, "r+b");
+    if(archi != NULL)
+    {
+        while(fread(&aux, sizeof(stEmpleado), 1, archi) > 0)
+        {
+            i++;
+        }
+        aux = crearUnEmpleado(i+1);
+        fwrite(&aux, sizeof(stEmpleado), 1, archi);
+        fclose(archi);
+    }
+}
