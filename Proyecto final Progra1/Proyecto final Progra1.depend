@@ -1,5 +1,6 @@
 # depslib dependency file v1.0
-1781975719 source:c:\users\chori\onedrive\documentos\github\proyecto-final-progra1\proyecto final progra1\main.c
+1781976831 source:c:\users\chori\onedrive\documentos\github\proyecto-final-progra1\proyecto final progra1\main.c
 	<stdio.h>
 	<stdlib.h>
+	<windows.h>
 

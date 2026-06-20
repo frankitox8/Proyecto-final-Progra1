@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
 #define DIMTEXTO 30
 
@@ -29,6 +30,7 @@ typedef struct
 }stCliente;
 
 void menu();
+void barraCarga();
 void menuClientes();
 void menuProducto();
 void menuEmpleado();
@@ -80,6 +82,7 @@ void menu()
             }break;
         case 1:
             {
+                barraCarga();
                 menuClientes();
             }break;
         case 2:
@@ -96,6 +99,25 @@ void menu()
             }break;
         }
     }while(op != 0);
+}
+
+void barraCarga()
+{
+    system("cls");
+    char cian[] = "\x1b[36m";
+    char verde[] = "\x1b[32m";
+    char reset[] = "\x1b[0m";
+    printf("\n\n\n\n\n");
+    printf("                                    %sCargando sistema...%s\n", cian, reset);
+    printf("                                    [");
+    for (int i = 0; i < 25; i++)
+    {
+        printf("%s%c%s", verde, 219, reset);
+        Sleep(80);
+    }
+    printf("] 100%%\n");
+    Sleep(500);
+    system("cls");
 }
 
 void menuClientes()
