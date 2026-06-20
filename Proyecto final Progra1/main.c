@@ -4,6 +4,7 @@
 
 #define DIMTEXTO 30
 
+//STRUCTS
 typedef struct
 {
     int id;
@@ -29,6 +30,7 @@ typedef struct
     int activo;
 }stCliente;
 
+//MENÚ Y SUBMENÚS
 void menu();
 void barraCarga();
 void menuClientes();
@@ -118,6 +120,7 @@ void barraCarga()
     system("cls");
 }
 
+//MENÚ Y SUBMENÚS
 void menuClientes()
 {
     int op;
@@ -126,9 +129,11 @@ void menuClientes()
         printf("\x1b[34mCLIENTE\x1b[0m\n");
         printf("Ingrese la accion a realizar:\n");
         printf("_________________\n");
-        printf("|\x1b[34m[1] CLIENTE\x1b[0m    |\n");
-        printf("|\x1b[33m[2] EMPLEADO\x1b[0m   |\n");
-        printf("|\x1b[32m[3] PRODUCTO\x1b[0m   |\n");
+        printf("|[1] ALTA DE CLIENTE|\n");
+        printf("|[2] BAJA DE CLIENTE|\n");
+        printf("|[3] MODIFICAR CLIENTE|\n");
+        printf("|[4] |\n");
+        printf("|[5] |\n");
         printf("|\x1b[31m[0] SALIR\x1b[0m      |\n");
         printf("-----------------\n");
         if (scanf("%i", &op) != 1)
@@ -141,7 +146,23 @@ void menuClientes()
         system("cls");
         switch(op)
         {
+            default
+                printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~\n");
+                system("pause");
+                system("cls");
+            break;
+            case 1:
+                printf();
+            break;
+            case 2
 
+            break;
+            case 3
+
+            break;
+            case 4
+
+            break;
         }
     }while(op != 0);
 }
