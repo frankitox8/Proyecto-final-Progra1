@@ -48,6 +48,8 @@ stCliente modificarCliente(FILE *archi, int id);
 //CONSULTA
 void mostrarCliente(stCliente cliente);
 void mostrarClienteEnArchivo(char nombre[], int id);
+//LISTADOS
+
 
 int main()
 {
@@ -83,14 +85,17 @@ void menu()
             system("cls");
         break;
         case 1:
+            system("cls");
             barraCarga();
             menuClientes();
         break;
         case 2:
+            system("cls");
             barraCarga();
             menuEmpleado();
         break;
         case 3:
+            system("cls");
             barraCarga();
             menuProducto();
         break;
@@ -103,7 +108,6 @@ void menu()
 
 void barraCarga()
 {
-    system("cls");
     char cian[] = "\x1b[36m";
     char verde[] = "\x1b[32m";
     char reset[] = "\x1b[0m";
@@ -112,7 +116,7 @@ void barraCarga()
     printf("                                    [");
     for (int i = 0; i < 25; i++)
     {
-        printf("%s%c%s", verde, 219, reset);
+        printf("%s%c%s", verde, 219,reset);
         Sleep(80);
     }
     printf("] 100%%\n");
@@ -124,18 +128,19 @@ void barraCarga()
 void menuClientes()
 {
     int op;
+    char nombre[DIMTEXTO] = "clientes.bin";
     do
     {
         printf("\x1b[34mCLIENTE\x1b[0m\n");
         printf("Ingrese la accion a realizar:\n");
-        printf("_________________\n");
-        printf("|[1] ALTA DE CLIENTE|\n");
-        printf("|[2] BAJA DE CLIENTE|\n");
-        printf("|[3] MODIFICAR CLIENTE|\n");
+        printf("_________________________\n");
+        printf("|[1] ALTA DE CLIENTE    |\n");
+        printf("|[2] BAJA DE CLIENTE    |\n");
+        printf("|[3] MODIFICAR CLIENTE  |\n");
         printf("|[4] |\n");
         printf("|[5] |\n");
-        printf("|\x1b[31m[0] SALIR\x1b[0m      |\n");
-        printf("-----------------\n");
+        printf("|\x1b[31m[0]        SALIR\x1b[0m       |\n");
+        printf("-------------------------\n");
         if (scanf("%i", &op) != 1)
         {
             printf("Error:~ ~ ~ DEBE INGRESAR UNA OPCION VALIDA ~ ~ ~\n");
@@ -146,21 +151,25 @@ void menuClientes()
         system("cls");
         switch(op)
         {
-            default
+        default:
                 printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~\n");
                 system("pause");
                 system("cls");
             break;
+            case 0:
+                printf("- - - VOLVIENDO AL MENU PRINCIPAL - - -");
+                barraCarga();
+            break;
             case 1:
-                printf();
+                altaClientesArchivo(nombre);
             break;
-            case 2
+            case 2:
 
             break;
-            case 3
+            case 3:
 
             break;
-            case 4
+            case 4:
 
             break;
         }
@@ -208,17 +217,17 @@ void altaClientesArchivo(char nombre[])
     FILE *archi = fopen(nombre, "a+b");
     if(archi != NULL)
     {
-        aux = crearCliente();
-        verificacionDeElementos(archi, aux);
-        if(existe == 1)
-        {
-            printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
-        }
-        else
-        {
-            fwrite(&aux, sizeof(stCliente), 1, archi);
-        }
-        fclose(archi);
+            aux = crearCliente();
+            verificacionDeElementos(archi, aux);
+            if(existe == 1)
+            {
+                printf("\n- - - ESTE CLIENTE YA EXISTE - - -\n");
+            }
+            else
+            {
+                fwrite(&aux, sizeof(stCliente), 1, archi);
+            }
+            fclose(archi);
     }
 }
 
@@ -315,10 +324,15 @@ void mostrarClienteEnArchivo(char nombre[], int id)
     FILE *archi = fopen(nombre, "rb");
     if(archi != NULL)
     {
-        if(fread(&aux, sizeof(stCliente), 1, archi) > 0 && aux.activo == 1)
+        if(fread(&aux, sizeof(stCliente), 1, archi) > 0 && aux.id == id)
         {
-            mostrarCliente(aux);
+            if(aux.activo == 1)
+            {
+                mostrarCliente(aux);
+            }
         }
         fclose(archi);
     }
 }
+
+//LISTADOS DE CLIENTE
