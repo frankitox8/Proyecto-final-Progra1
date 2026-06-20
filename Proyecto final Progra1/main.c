@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #define DIMTEXTO 30
+
 typedef struct
 {
     int id;
@@ -31,50 +33,48 @@ typedef struct
     stProducto carrito[DIMTEXTO];
 }stCliente;
 
-void menu();
-
 int main()
 {
-    menu();
     return 0;
 }
 
-void menu()
+//ABMCL DE CLIENTE
+//ALTA CLIENTE
+stCliente crearCliente()
 {
-    int op = 0;
-    do
+    stCliente aux;
+    printf("_______________________________\n");
+    printf("Ingrese el ID del cliente: \n");
+    scanf("%i", &aux.id);
+    printf("Ingrese el DNI del cliente: \n");
+    scanf("%i", &aux.dni);
+    printf("Ingrese el nombre del cliente: \n");
+    scanf(" %s", &aux.nombre);
+    printf("-------------------------------\n");
+    return aux;
+}
+
+void altaArchivoDeClientes(char nombre[])
+{
+    stCliente aux;
+    FILE *archi = fopen(nombre, "ab");
+    if(archi != NULL)
     {
-        printf("\nIngrese la opcion: \n");
-        printf("_________________________________\n");
-        printf("| [1] |\n");
-        printf("| [2] |\n");
-        printf("| [3] |\n");
-        printf("| [4] |\n");
-        printf("| [5] |\n");
-        printf("| [6] |\n");
-        printf("| [7] |\n");
-        printf("| [0] FINALIZAR EL PROGRAMA     |\n");
-        printf("---------------------------------\n");
-        scanf("%i", &op);
-        system("cls");
-        switch(op)
+        aux = crearCliente();
+        if()
         {
-            default:
-                {
-                    printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~");
-                }break;
-            case 1:
-                {
 
-                }break;
-            case 2:
-                {
-
-                }break;
-            case 0:
-                {
-                    printf("- - - FINALIZANDO EL PROGRAMA - - -");
-                }
         }
-    }while(op != 0);
+        fclose(archi);
+    }
+}
+
+int verificacionDeElementos(FILE *archi, stCliente clienteNuevo)
+{
+    int existe = 0;
+    if()
+    {
+
+    }
+    return existe;
 }
