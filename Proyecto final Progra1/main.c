@@ -15,7 +15,7 @@ typedef struct
 {
     int id;
     int dni;
-    char nombre[DIMTEXTO];
+    char nombreYApellido[DIMTEXTO];
     int edad;
     char puesto[DIMTEXTO];
 }stEmpleado;
@@ -24,7 +24,7 @@ typedef struct
 {
     int id;
     int dni;
-    char nombre[DIMTEXTO];
+    char nombreYApellido[DIMTEXTO];
     stProducto carrito[DIMTEXTO];
     int activo;
 }stCliente;
@@ -44,7 +44,8 @@ void bajaDeClienteDeArchivo(char nombre[], int id);
 void modificarClienteDeArchivo(char nombre[], int id);
 stCliente modificarCliente(FILE *archi, int id);
 //CONSULTA
-
+void mostrarCliente(stCliente cliente);
+void mostrarClienteEnArchivo(char nombre[], int id);
 
 int main()
 {
@@ -87,10 +88,12 @@ void menu()
             }break;
         case 2:
             {
+                barraCarga();
                 menuEmpleado();
             }break;
         case 3:
             {
+                barraCarga();
                 menuProducto();
             }break;
         case 0:
@@ -139,6 +142,8 @@ void menuProducto()
 //ALTA CLIENTE
 stCliente crearCliente()
 {
+    char nombre[DIMTEXTO];
+    char apellido[DIMTEXTO];
     stCliente aux;
     printf("_______________________________\n");
     printf("Ingrese el ID del cliente: \n");
@@ -146,7 +151,12 @@ stCliente crearCliente()
     printf("Ingrese el DNI del cliente: \n");
     scanf("%i", &aux.dni);
     printf("Ingrese el nombre del cliente: \n");
-    scanf(" %s", &aux.nombre);
+    scanf(" %s", &nombre);
+    printf("Ingrese el apellido del cliente: \n");
+    scanf(" %s", &apellido);
+    strcat(nombre, " ");
+    strcat(nombre, apellido);
+    strcpy(aux.nombreYApellido, nombre);
     aux.activo = 1;
     printf("-------------------------------\n");
     return aux;
@@ -235,7 +245,7 @@ stCliente modificarCliente(FILE *archi, int id)
                 if(op == 's')
                 {
                     printf("\nIngrese el nuevo nombre: ");
-                    scanf(" %s", &aux.nombre);
+                    scanf(" %s", &aux.nombreYApellido);
                 }
                 printf("Quiere modificar el carrito? (s/n): ");
                 if(op == 's')
@@ -249,7 +259,27 @@ stCliente modificarCliente(FILE *archi, int id)
 }
 
 //CONSULTA DE CLIENTE
-void mostrarClienteEnArchivo()
+void mostrarCliente(stCliente cliente)
 {
+    printf("\x1b[34mCLIENTE:\x1b[0m\n\n");
+    printf("____________________________\n");
+    printf("| ID: %i |\n", cliente.id);
+    printf("| DNI %i |\n", cliente.dni);
+    printf("| NOMBRE: %s\n", cliente.nombreYApellido);
+    //LLAMAR A FUNCION DE MOSTRAR PRODUCTO
+    printf("-----------------------------\n");
+}
 
+void mostrarClienteEnArchivo(char nombre[], int id)
+{
+    stCliente aux;
+    FILE *archi = fopen(nombre, "rb");
+    if(archi != NULL)
+    {
+        if(fread(&aux, sizeof(stCliente), 1, archi) > 0 && aux.activo == 1)
+        {
+            mostrarCliente(aux);
+        }
+        fclose(archi);
+    }
 }
