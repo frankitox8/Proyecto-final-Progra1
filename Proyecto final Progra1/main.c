@@ -76,30 +76,25 @@ void menu()
         switch(op)
         {
         default:
-            {
-                printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~\n");
-                system("pause");
-                system("cls");
-            }break;
+            printf("~ ~ ~ INGRESE UNA OPCION VALIDA ~ ~ ~\n");
+            system("pause");
+            system("cls");
+        break;
         case 1:
-            {
-                barraCarga();
-                menuClientes();
-            }break;
+            barraCarga();
+            menuClientes();
+        break;
         case 2:
-            {
-                barraCarga();
-                menuEmpleado();
-            }break;
+            barraCarga();
+            menuEmpleado();
+        break;
         case 3:
-            {
-                barraCarga();
-                menuProducto();
-            }break;
+            barraCarga();
+            menuProducto();
+        break;
         case 0:
-            {
-                printf("- - - FINALIZANDO EL PROGRAMA - - -\n");
-            }break;
+            printf("- - - FINALIZANDO EL PROGRAMA - - -\n");
+        break;
         }
     }while(op != 0);
 }
@@ -125,7 +120,30 @@ void barraCarga()
 
 void menuClientes()
 {
+    int op;
+    do
+    {
+        printf("\x1b[34mCLIENTE\x1b[0m\n");
+        printf("Ingrese la accion a realizar:\n");
+        printf("_________________\n");
+        printf("|\x1b[34m[1] CLIENTE\x1b[0m    |\n");
+        printf("|\x1b[33m[2] EMPLEADO\x1b[0m   |\n");
+        printf("|\x1b[32m[3] PRODUCTO\x1b[0m   |\n");
+        printf("|\x1b[31m[0] SALIR\x1b[0m      |\n");
+        printf("-----------------\n");
+        if (scanf("%i", &op) != 1)
+        {
+            printf("Error:~ ~ ~ DEBE INGRESAR UNA OPCION VALIDA ~ ~ ~\n");
+            while (getchar() != '\n');
+            op = -1;
+            system("pause");
+        }
+        system("cls");
+        switch(op)
+        {
 
+        }
+    }while(op != 0);
 }
 
 void menuEmpleado()
